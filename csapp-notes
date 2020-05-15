@@ -216,5 +216,108 @@ Go to page 21 for the Special Arithmetic Operations
 
 3.6 CONTROL
 
-LAST PAGe 220
+
+3.6 CONTROL
+
+
+3.6.1 Condition Codes
+In addition to the integer registers, the CPU maintains a set of single-bit condition
+code registers describing attributes of the most recent arithmetic or logical operation. 
+These registers can then be tested to perform conditional branches. The most
+useful condition codes are:
+
+CF: Carry Flag. The most recent operation generated a carry out of the most
+significant bit. Used to detect overflow for unsigned operations.
+ZF: Zero Flag. The most recent operation yielded zero.
+SF: Sign Flag. The most recent operation yielded a negative value.
+OF: Overflow Flag. The most recent operation caused a two’s-complement
+overflow—either negative or positive.
+
+Go to page 221 for the Comparison and test instructions
+
+All of the instructions exept leal instruction cause the condition codes to be set. 
+
+In the event you want to update the condtion codes without changing value in the registers (destination),
+the following instructions can be used.
+ Note: For this instuction, the operands are listed in reverse order.
+ 
+* CMP instructions behave the same way as SUB.
+* TEST instructions behave the same way as ADD 
+
+3.6.2 Accessing the Condition Codes
+
+For reading the value of the condtion codes, the SET instruction is being used.
+
+Go to page 222. Copy figure 3.11
+
+They differ from one another based on which combinations of condition codes they consider, as indicated by the different suffixes for the instruction names.
+A set instruction has either one of the eight single-byte register elements
+or a single-byte memory location as its destination, setting this byte
+to either 0 or 1. 
+
+3.6.2 Jump Instruction and their Encodings
+
+A jump instruction can cause the execution to switch to a completely
+new position in the program. These jump destinations are generally indicated in
+assembly code by a label. 
+
+In generating the object-code file, the assembler determines the addresses of all labeled instructions and encodes the jump targets (the addresses of the destination instructions)
+as part of the jump instructions.
+
+Go to page 225. Copy figure 3.12
+
+3 types
+* Direct jumps are written in assembly by giving a label as the jump target
+* Indirect jumps are written using ‘*’ followed by an operand specifier using one of the formats
+* The remaining jump instructions in the table are conditional—they either
+jump or continue executing at the next instruction in the code sequence, depending
+on some combination of the condition codes. 
+
+How the address of jump targets are being encoded?
+
+PC relative is one of the most commonly used encodings for jumps.
+It encodes the difference between the address of the target instruction
+and the address of the instruction immediately following the jump.
+The offset can be encoded using 1, 2, or 4 bytes. 
+
+The second method is to give an "absolute" address, using 4 bytes
+to directly specify the target. 
+
+※ The assembler and linker select the appropriate encodings of the jump destinations.
+
+
+3.6.5 Loops
+
+3.6.6 Conditional Move Instructions
+
+The conventional way to implement conditional operations is through a conditional transfer of control, where the program follows one execution path when
+a condition holds and another when it does not. This mechanism is simple and
+general, but it can be very inefficient on modern processors.
+
+An alternate strategy is through a conditional transfer of data. 
+
+To understand why code based on conditional data transfers can outperform
+code based on conditional control transfers. You have to understand pipelining to be discussed in
+Chapter 4 and 5. (I can't understand)
+
+
+Go to page 245. Copy figure 3.17 The conditional move instructions
+
+Each of these instructions has two operands: a source register or memory location S, and a destination register R. As with the different set (Section 3.6.2)
+and jump instructions (Section 3.6.3), the outcome of these instructions depends
+on the values of the condition codes. The source value is read from either memory or the source register, but it is copied to the destination only if the specified
+condition holds.
+
+For IA32, the source and destination values can be 16 or 32 bits long. Singlebyte conditional moves are not supported.
+
+3.6.7 SWITCH STATEMENTS
+
+A switch statement prvides a muti-way branching capability based on the value of an intergr index.
+It uses a jump table to allow an efficient implementation.
+A jump table is an array where entry i is the address of a code segment 
+implementing the action the program should take when the switch index
+equals q.
+
+jmp *.L7(,%eax,4) Goto *jt[index]
+
 
